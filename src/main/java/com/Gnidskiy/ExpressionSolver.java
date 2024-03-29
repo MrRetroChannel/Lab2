@@ -183,6 +183,8 @@ public class ExpressionSolver {
             if (!getNextToken(')')) {
                 throw new RuntimeException("Expected ), instead found " + curChar());
             }
+            else
+            return result;
         }
         else if (isNumber(curChar())) {
             result += parseNumber();
@@ -192,7 +194,7 @@ public class ExpressionSolver {
             
             FunctionType type = functions.get(arg);
             if (type != null)
-                return applyFunction(type, solveExpression());
+                result = applyFunction(type, solveExpression());
             else
             if (_variables != null) {
                 Double checkVariable = _variables.get(arg);
