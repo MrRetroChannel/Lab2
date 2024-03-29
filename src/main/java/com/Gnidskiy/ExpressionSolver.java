@@ -16,26 +16,54 @@ public class ExpressionSolver {
 
     private int curIter = 0;
 
+    /**
+     * Getting a current char
+     * @return Current char in curIter position
+     */
     private char curChar() {
         return _expression[curIter]; 
     }
 
+    /**
+     * Checking if iterator is in array bounds
+     * @return true if curIter is inBounds and false otherwise
+     */
     private boolean inBounds() {
         return curIter < _expression.length;
     }
 
+    /**
+     * Checks if char is some kind of space
+     * @param c checked char
+     * @return Result of check 
+     */
     private static boolean isSpace(char c) {
         return c == ' ' || c == '\n' || c == '\t' || c == '\0';
     }
 
+    /**
+     * Checks if char is a letter
+     * @param c checked char
+     * @return Result of check
+     */ 
     private static boolean isLetter(char c) {
         return c >= 'a' && c <= 'z'; 
     }
 
+    /**
+     * Checks if char is a number
+     * @param c checked char
+     * @return Result of check
+     */
     private static boolean isNumber(char c) {
         return c >= '0' && c <= '9' || c == '.';
     }
 
+    /**
+     * Gets next character in row and checks if provided char matches with current one
+     * @param c checked char
+     * @return Result of comparison between c and current char
+     */
     private boolean getNextToken(char c) {
         while (isSpace(curChar()))
             ++curIter;
@@ -48,6 +76,10 @@ public class ExpressionSolver {
         return false;
     }
 
+    /**
+     * Parses current number, called only if current char is a number
+     * @return Parsed number
+     */
     private double parseNumber() {
         StringBuilder numBuilder = new StringBuilder();
 
@@ -62,6 +94,10 @@ public class ExpressionSolver {
         }
     }
   
+    /**
+     * Parses current function or a variable, called only if current char is a letter
+     * @return Parsed symbol
+     */
     private String parseSymbol() {
         StringBuilder symbolBuilder = new StringBuilder();
 
@@ -71,6 +107,10 @@ public class ExpressionSolver {
         return symbolBuilder.toString();
     }
 
+    /**
+     * Solves expression with lowest priority (addition, substraction)
+     * @return Result of expression
+     */
     private double solveExpression() {
         double result = solveTerm();
 
@@ -87,6 +127,10 @@ public class ExpressionSolver {
         return result;
     }
 
+    /**
+     * Solves expression with medium priority (multiplication, division)
+     * @return Result of term
+    */
     private double solveTerm() {
         double result = solveFactor();
 
@@ -103,6 +147,10 @@ public class ExpressionSolver {
         return result;
     }
 
+    /**
+     * Gets result of first priority expression (brackets) or an unary number
+     * @return Result of expression
+     */
     private double solveFactor() {
         if (getNextToken('+'))
             return +solveFactor();
@@ -141,6 +189,12 @@ public class ExpressionSolver {
         return result;
     }
 
+    /**
+     * Applise parsed expression to parsed function
+     * @param functionType type of function from static functions HashMap
+     * @param argument argument of provided function
+     * @return
+     */
     private double applyFunction(FunctionType functionType, double argument) {
         switch (functionType) {
             case SIN:
@@ -168,6 +222,10 @@ public class ExpressionSolver {
         _expression = expression.toCharArray();
     }
 
+    /**
+     * Takes an expression string and solves it with all mathematical rules
+     * @return Result of a mathematical expression
+     */
     public double solve() {
         double result = solveExpression();
 
