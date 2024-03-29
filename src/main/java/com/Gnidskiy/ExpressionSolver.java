@@ -98,6 +98,20 @@ public class ExpressionSolver {
     }
   
     /**
+     * Evaluates factorial of number
+     * @param value base number of factorial
+     * @return result of factorial
+     */
+    private double factorial(int value) {
+        double result = 1;
+
+        for (int i = 1; i <= value; ++i)
+            result *= i;
+
+        return result;
+    }
+
+    /**
      * Parses current function or a variable, called only if current char is a letter
      * @return Parsed symbol
      */
@@ -191,6 +205,10 @@ public class ExpressionSolver {
 
         if (getNextToken('^')) {
             result = Math.pow(result, solveFactor());
+        }
+
+        if (getNextToken('!')) {
+            result = factorial((int)result);
         }
 
         return result;
