@@ -65,6 +65,9 @@ public class ExpressionSolver {
      * @return Result of comparison between c and current char
      */
     private boolean getNextToken(char c) {
+        if (!inBounds())
+            return false;
+
         while (isSpace(curChar()))
             ++curIter;
 
@@ -174,18 +177,22 @@ public class ExpressionSolver {
             String arg = parseSymbol();
             
             FunctionType type = functions.get(arg);
-            if (type != null) 
+            if (type != null)
                 return applyFunction(type, solveExpression());
-
+            else
             if (_variables != null) {
                 Double checkVariable = _variables.get(arg);
                 if (checkVariable != null)
-                    return checkVariable;
+                    result = checkVariable;
             }
-
+            else
             throw new RuntimeException("There is no function or variable with name " + arg);
         }
-        
+
+        if (getNextToken('^')) {
+            result = Math.pow(result, solveFactor());
+        }
+
         return result;
     }
 
@@ -230,7 +237,7 @@ public class ExpressionSolver {
         double result = solveExpression();
 
         if (inBounds())
-            throw new RuntimeException("Unexprected end of expression at " + curIter);
+            throw new RuntimeException("Unexpected end of expression at " + curIter);
 
         return result;
     }
